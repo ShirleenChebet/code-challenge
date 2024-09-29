@@ -26,7 +26,7 @@ git@github.com:ShirleenChebet/code-challenge.git
 ```
 Open your terminal and navigate into its directory.
 # Live Link
-
+https://github.com/ShirleenChebet/code-challenge.git
 
 ## Technologies used
 HTML
