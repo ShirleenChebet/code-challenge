@@ -21,12 +21,12 @@ Git
 
 ### Installation instruction
 ```
-Git clone https://github.com/hamida-mstafa/Triangle-tracker.git
-
+git clone 
+git@github.com:ShirleenChebet/code-challenge.git
 ```
 Open your terminal and navigate into its directory.
 # Live Link
-[Git](gh-pages link)
+
 
 ## Technologies used
 HTML
