@@ -1,19 +1,13 @@
-document.addEventListener("DOMContentLoaded", function() {
-    let myElement = document.getElementById('myElement');
-    console.log(myElement);
-    myElement.addEventListener('click', function() {
-    });
-// Calculation of payee
+// Calculation of PAYE
 function calculatePayee(taxableIncome) {
     if (taxableIncome <= 24000) return 0;
-    if (taxableIncome <= 32333) return (taxableIncome -24000) * 0.1;
-    if (taxableIncome <= 40333) return 833 + (taxableIncome - 32333) *0.15
-    if (taxableIncome <= 48333) return 2083 + (taxableIncome - 40333) *0.2
+    if (taxableIncome <= 32333) return (taxableIncome - 24000) * 0.1;
+    if (taxableIncome <= 40333) return 833 + (taxableIncome - 32333) * 0.15;
+    if (taxableIncome <= 48333) return 2083 + (taxableIncome - 40333) * 0.2;
     return 3683 + (taxableIncome - 48333) * 0.25;
 }
 
-//Calculation of Nhif
-
+// Calculation of NHIF
 function calculateNHIF(grossSalary) {
     if (grossSalary <= 5999) return 150;
     if (grossSalary <= 7999) return 300;
@@ -26,52 +20,56 @@ function calculateNHIF(grossSalary) {
     if (grossSalary <= 39999) return 950;
     return 1000;
 }
-//Calculation of NSSF
+
+// Calculation of NSSF
 function calculateNSSF(pensionablePay) {
     const nssfRate = 0.06;
     const maxContribution = 1080;
     return Math.min(pensionablePay * nssfRate, maxContribution);
 }
-//Calculation of Net Salary
+
+// Calculation of Net Salary
 function calculateNetSalary(basicSalary, benefits) {
     const grossSalary = basicSalary + benefits;
     const nssf = calculateNSSF(basicSalary);
+    const taxableIncome = grossSalary - nssf; // Correctly define taxableIncome
     const payee = calculatePayee(taxableIncome);
     const nhif = calculateNHIF(grossSalary);
 
+    const totalDeductions = payee + nhif + nssf;
+    const netSalary = grossSalary - totalDeductions;
 
-const totalDeductions = payee + nhif + nssf;
-const netSalary = grossSalary - totalDeductions;
-
-return {
-    grossSalary,
-    payee,
-    nhif,
-    nssf,
-    totalDeductions,
-    netSalary
-  };
+    return {
+        grossSalary,
+        payee,
+        nhif,
+        nssf,
+        totalDeductions,
+        netSalary
+    };
 }
-//Users input
 
-document.getElementById('salaryForm').addEventListener('submit',
-function(e) {
+// User's input
+document.getElementById('salaryForm').addEventListener('submit', function(e) {
     e.preventDefault();
-
-    const basicSalary =
-    parseFloat(document.getElementById('basicSalary').value);
+    
+    const basicSalary = parseFloat(document.getElementById('basicSalary').value);
     const benefits = parseFloat(document.getElementById('benefits').value);
+
+    console.log('Basic Salary:', basicSalary);
+    console.log('Benefits:', benefits);
 
     const result = calculateNetSalary(basicSalary, benefits);
 
+    console.log('Result:', result);
+
     document.getElementById('result').innerHTML = `
-    <h2>Salary Breakdown:</h2>
-    <p>Gross Salary: ${result.grossSalary.toFixed(2)}</p>
-    <p>PAYE (TAX): ${result.payee.toFixed(2)}</p>
-    <p>NHIF Deduction: ${result.nhif.toFixed(2)}</p>
-    <p>NSSF Deduction: ${result.nssf.toFixed(2)}</p>
-    <p>Total Deductions: ${result.totalDeductions.toFixed(2)}</p>
-    <p><strong>Net Salary: ${result.netSalary.toFixed(2)}</strong></p>
+        <h2>Salary Breakdown:</h2>
+        <p>Gross Salary: ${result.grossSalary.toFixed(2)}</p>
+        <p>PAYE (TAX): ${result.payee.toFixed(2)}</p>
+        <p>NHIF Deduction: ${result.nhif.toFixed(2)}</p>
+        <p>NSSF Deduction: ${result.nssf.toFixed(2)}</p>
+        <p>Total Deductions: ${result.totalDeductions.toFixed(2)}</p>
+        <p><strong>Net Salary: ${result.netSalary.toFixed(2)}</strong></p>
     `;
-});
 });
