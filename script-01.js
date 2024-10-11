@@ -1,15 +1,21 @@
-let grade = parseInt(prompt("Enter your student marks(0 - 100):"));
-const marks = (grade >= 0 && grade <= 100)
-if (marks) {
-    if (grade > 79) {
-        alert("Your grade is A");
-    } else if (grade >= 60) {
-        alert("Your grade is B");
-    } else if (grade >= 49) {
-        alert("Your grade is C");
-    } else if (grade >= 40) {
-        alert("Your grade is D");
-    } else {
-        alert("Your grade is E");
-    }
-}
+let grade = 99.999;
+if (grade >= 0 && grade <= 40) {
+    console.log("E");
+ }
+ //first alert
+   else if (grade >= 41 && grade <= 49) {
+        console.log("D"); 
+     }
+     //second alert
+        else if (grade >= 50 && grade <= 59) {
+            console.log("C"); 
+        }
+        //third alert
+           else if (grade >= 60 && grade <= 79) {
+               console.log("B");
+             }
+             //fourth alert
+                else if (grade >= 80 && grade <= 100) {
+                    console.log("A"); 
+                }
+                //fifth alert
