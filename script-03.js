@@ -1,4 +1,10 @@
-// Calculation of PAYE
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 function calculatePayee(taxableIncome) {
     if (taxableIncome <= 24000) return 0;
     if (taxableIncome <= 32333) return (taxableIncome - 24000) * 0.1;
@@ -7,7 +13,6 @@ function calculatePayee(taxableIncome) {
     return 3683 + (taxableIncome - 48333) * 0.25;
 }
 
-// Calculation of NHIF
 function calculateNHIF(grossSalary) {
     if (grossSalary <= 5999) return 150;
     if (grossSalary <= 7999) return 300;
@@ -21,18 +26,16 @@ function calculateNHIF(grossSalary) {
     return 1000;
 }
 
-// Calculation of NSSF
 function calculateNSSF(pensionablePay) {
     const nssfRate = 0.06;
     const maxContribution = 1080;
     return Math.min(pensionablePay * nssfRate, maxContribution);
 }
 
-// Calculation of Net Salary
 function calculateNetSalary(basicSalary, benefits) {
     const grossSalary = basicSalary + benefits;
     const nssf = calculateNSSF(basicSalary);
-    const taxableIncome = grossSalary - nssf; // Correctly define taxableIncome
+    const taxableIncome = grossSalary - nssf; 
     const payee = calculatePayee(taxableIncome);
     const nhif = calculateNHIF(grossSalary);
 
@@ -49,27 +52,21 @@ function calculateNetSalary(basicSalary, benefits) {
     };
 }
 
-// User's input
-document.getElementById('salaryForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const basicSalary = parseFloat(document.getElementById('basicSalary').value);
-    const benefits = parseFloat(document.getElementById('benefits').value);
+rl.question('Enter your basic salary: ', (basicSalaryInput) => {
+    rl.question('Enter your benefits: ', (benefitsInput) => {
+        const basicSalary = parseFloat(basicSalaryInput);
+        const benefits = parseFloat(benefitsInput);
 
-    console.log('Basic Salary:', basicSalary);
-    console.log('Benefits:', benefits);
+        const result = calculateNetSalary(basicSalary, benefits);
 
-    const result = calculateNetSalary(basicSalary, benefits);
+        console.log(`Salary Breakdown:`);
+        console.log(`Gross Salary: ${result.grossSalary.toFixed(2)}`);
+        console.log(`PAYE (TAX): ${result.payee.toFixed(2)}`);
+        console.log(`NHIF Deduction: ${result.nhif.toFixed(2)}`);
+        console.log(`NSSF Deduction: ${result.nssf.toFixed(2)}`);
+        console.log(`Total Deductions: ${result.totalDeductions.toFixed(2)}`);
+        console.log(`Net Salary: ${result.netSalary.toFixed(2)}`);
 
-    console.log('Result:', result);
-
-    document.getElementById('result').innerHTML = `
-        <h2>Salary Breakdown:</h2>
-        <p>Gross Salary: ${result.grossSalary.toFixed(2)}</p>
-        <p>PAYE (TAX): ${result.payee.toFixed(2)}</p>
-        <p>NHIF Deduction: ${result.nhif.toFixed(2)}</p>
-        <p>NSSF Deduction: ${result.nssf.toFixed(2)}</p>
-        <p>Total Deductions: ${result.totalDeductions.toFixed(2)}</p>
-        <p><strong>Net Salary: ${result.netSalary.toFixed(2)}</strong></p>
-    `;
+        rl.close();
+    });
 });
